@@ -61,10 +61,10 @@ Usage
 ### Caching data
 
 The `initial-test-data` generates the md5 digest of all ruby scripts in
-the `initial_data` directory and stores it to the `_initial_data_digest`
-table of the test database.
+the `initial_data` directory and `app/models` directory,
+then stores it to the `_initial_data_digest` table of the test database.
 
-If the generated md5 digest is equal to the previously stored value,
+When the generated md5 digest is equal to the previously stored value,
 data initializing process will be skipped.
 
 ### Load Order
@@ -79,7 +79,9 @@ which has a content like this:
 - orders
 ```
 
-### Database Cleaner
+### Options for the `InitialTestData.load` method
+
+#### `except`
 
 The `initial-test-data` utilizes the `database_cleaner` gem to truncate
 all tables except `_initial_data_digest` and `schema_migrations`.
@@ -95,6 +97,25 @@ end
 ```
 
 This option is passed to the `DatabaseCleaner.strategy=` method.
+
+#### `monitoring`
+
+By default the `initial-test-data` monitors the `initial_data` directory
+under the `test` directory (or the directory specified by the first argument)
+and the `app/models` directory.
+
+If you want to add monitoring target directories, specify `monitoring`
+option to the `InitialTestData.load` method:
+
+```ruby
+RSpec.configure do |config|
+  config.before(:suite) do
+    InitialTestData.load('spec', monitoring: [ 'app/services', 'lib' ]
+  end
+end
+```
+
+You should use relative paths from the `Rails.root`.
 
 Example
 -------

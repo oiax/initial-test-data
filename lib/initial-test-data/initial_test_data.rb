@@ -18,6 +18,8 @@ class InitialTestData
 
       unless md5_digest == md5_digest_cache
         initialize_data
+
+        digest = klass.first
         digest ||= klass.new
         digest.md5_value = md5_digest
         digest.save
@@ -41,8 +43,20 @@ class InitialTestData
 
     def generate_md5_digest
       md5 = Digest::MD5.new
+
       Dir[Rails.root.join(@dir, 'initial_data', '*.rb')].each do |f|
         md5.update File.new(f).read
+      end
+
+      dirs = [ 'app/models' ]
+      if @options[:monitoring].kind_of?(Array)
+        dirs += @options[:monitoring]
+      end
+
+      dirs.each do |d|
+        Dir[Rails.root.join(d, '**', '*.rb')].each do |f|
+          md5.update File.new(f).read
+        end
       end
 
       md5.hexdigest
