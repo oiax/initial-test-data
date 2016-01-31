@@ -29,7 +29,23 @@ Configuration of test framework
 
 ### MiniTest
 
-To be written.
+Edit `test/test_helper.rb` like this:
+
+```ruby
+ENV['RAILS_ENV'] ||= 'test'
+require File.expand_path('../../config/environment', __FILE__)
+require 'rails/test_help'
+require 'initial-test-data'
+
+InitialTestData.load
+
+class ActiveSupport::TestCase
+  # (snip)
+end
+```
+
+Note that the default value of the first argument of `load` method is `'test'`,
+so you can omit it when your test scripts are located in the `test` directory.
 
 ### RSpec
 
@@ -122,7 +138,42 @@ Example
 
 ### MiniTest and Active Record
 
-To be written
+```ruby
+# test/initial_data/customers.rb
+
+0.upto(9) do |n|
+  Customer.create(
+    email: "test#{n}@example.com",
+    given_name: 'John',
+    family_name: 'Doe'
+  )
+end
+
+# test/integration/manage_customers_test.rb
+
+require 'test_helper'
+
+class ManageCustomersTest < ActionDispatch::IntegrationTest
+  test "Change the name of a customer" do
+    customer = Customer.find_by(email: 'test0@example.com')
+
+    get "/customers/#{customer.id}/edit"
+    assert_response :success
+
+    patch "/customers/#{customer.id}",
+      customer: { given_name: 'Mike', family_name: 'Smith' }
+    assert_redirected_to [ assigns(:customer) ]
+
+    follow_redirect!
+    assert_select "h1", "Listing Customers"
+
+    customer.reload
+
+    assert_equal 'Mike', customer.given_name
+    assert_equal 'Smith', customer.family_name
+  end
+end
+```
 
 ### RSpec, Capybara and Factory Girl
 
