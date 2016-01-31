@@ -14,5 +14,5 @@ Gem::Specification.new do |s|
 
   s.add_dependency "database_cleaner", "~> 1.5"
 
-  s.files = %w(README.md MIT-LICENSE) + Dir.glob("lib/**/*")
+  s.files = %w(CHANGELOG.md README.md MIT-LICENSE) + Dir.glob("lib/**/*")
 end

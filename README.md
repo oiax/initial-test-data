@@ -79,6 +79,23 @@ which has a content like this:
 - orders
 ```
 
+### Database Cleaner
+
+The `initial-test-data` utilizes the `database_cleaner` gem to truncate
+all tables except `_initial_data_digest` and `schema_migrations`.
+
+If you want to keep some tables intact, specify the `except` option:
+
+```ruby
+RSpec.configure do |config|
+  config.before(:suite) do
+    InitialTestData.load('spec', except: %w(country_names))
+  end
+end
+```
+
+This option is passed to the `DatabaseCleaner.strategy=` method.
+
 Example
 -------
 

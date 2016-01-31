@@ -5,8 +5,9 @@ class InitialTestData
   DIGEST_TABLE_NAME = '_initial_data_digest'
 
   class << self
-    def load(dir = 'test')
-      @dir = dir.to_s
+    def load(*args)
+      @database_cleaner_strategy_options = args.extract_options!
+      @dir = args[0] || 'test'
 
       klass = define_class
 
@@ -48,7 +49,7 @@ class InitialTestData
     end
 
     def initialize_data
-      DatabaseCleaner.strategy = :truncation
+      DatabaseCleaner.strategy = :truncation, @database_cleaner_strategy_options
       DatabaseCleaner.clean
 
       yaml_path = Rails.root.join(@dir, 'initial_data', '_index.yml')
