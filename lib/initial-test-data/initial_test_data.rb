@@ -6,7 +6,7 @@ class InitialTestData
 
   class << self
     def load(*args)
-      @database_cleaner_strategy_options = args.extract_options!
+      @options = args.extract_options!
       @dir = args[0] || 'test'
 
       klass = define_class
@@ -49,7 +49,15 @@ class InitialTestData
     end
 
     def initialize_data
-      DatabaseCleaner.strategy = :truncation, @database_cleaner_strategy_options
+      strategy_options = @options.slice(:only, :except)
+      unless strategy_options.has_key?(:only)
+        strategy_options[:except] ||= []
+        unless strategy_options[:except].include?(DIGEST_TABLE_NAME)
+          strategy_options[:except] << DIGEST_TABLE_NAME
+        end
+      end
+
+      DatabaseCleaner.strategy = :truncation, strategy_options
       DatabaseCleaner.clean
 
       yaml_path = Rails.root.join(@dir, 'initial_data', '_index.yml')
