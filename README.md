@@ -126,7 +126,8 @@ option to the `InitialTestData.load` method:
 ```ruby
 RSpec.configure do |config|
   config.before(:suite) do
-    InitialTestData.load('spec', monitoring: [ 'app/services', 'lib' ]
+    InitialTestData.load('spec',
+      monitoring: [ 'app/services', 'lib', 'spec/factories' ]
   end
 end
 ```
