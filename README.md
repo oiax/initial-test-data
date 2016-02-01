@@ -40,6 +40,8 @@ require 'initial-test-data'
 InitialTestData.load
 
 class ActiveSupport::TestCase
+  include InitialTestData::Utilities
+
   # (snip)
 end
 ```
@@ -59,6 +61,8 @@ require 'rspec/rails'
 require 'initial-test-data'
 
 RSpec.configure do |config|
+  config.include InitialTestData::Utilities
+
   config.before(:suite) do
     InitialTestData.load('spec')
   end
@@ -134,6 +138,35 @@ end
 
 You should use relative paths from the `Rails.root`.
 
+### Utility methods: `store` and `fetch`
+
+The `initial-test-data` provides two utility methods, `store` and `fetch`,
+to make it easy to refer the initialized records in your tests.
+
+You can use the `store` method within the initialization scripts
+in order to register an ActiveRecord object by name:
+
+```ruby
+include InitialTestData::Utilities
+
+store(Customer.create(...), :john)
+store(ShopOwner.create(...), :mike)
+```
+
+Then, you can get this record with `fetch` method in the test scripts:
+
+```ruby
+customer = fetch(:customer, :john)
+show_owner = fetch(:shop_owner, :mike)
+```
+
+The fetch method treats `:john` and `"john"` as the same key.
+
+Note that the `initial-test-data` creates a YAML file
+named `initial_data_record_ids.yml` in the `tmp` directory
+to track the primary key values of registered records.
+Please do not remove or tamper it.
+
 Example
 -------
 
@@ -142,12 +175,15 @@ Example
 ```ruby
 # test/initial_data/customers.rb
 
+include InitialTestData::Utilities
+
 0.upto(9) do |n|
-  Customer.create(
+  c = Customer.create(
     email: "test#{n}@example.com",
     given_name: 'John',
     family_name: 'Doe'
   )
+  store(c, "test#{n}")
 end
 
 # test/integration/manage_customers_test.rb
@@ -156,7 +192,7 @@ require 'test_helper'
 
 class ManageCustomersTest < ActionDispatch::IntegrationTest
   test "Change the name of a customer" do
-    customer = Customer.find_by(email: 'test0@example.com')
+    customer = fetch(:customer, :test0)
 
     get "/customers/#{customer.id}/edit"
     assert_response :success
@@ -182,9 +218,11 @@ end
 # spec/initial_data/customers.rb
 
 include FactoryGirl::Syntax::Methods
+include InitialTestData::Utilities
 
 0.upto(9) do |n|
-  create(:customer, email: "test#{n}@example.com")
+  c = create(:customer, email: "test#{n}@example.com")
+  store(c, "test#{n}")
 end
 
 # spec/features/manage_customers_spec.rb
@@ -192,7 +230,7 @@ end
 require 'rails_helper'
 
 feature 'Manage customers' do
-  let(:customer) { Customer.find_by(email: 'test0@example.com') }
+  let(:customer) { fetch(:customer, :test0) }
 
   scenario 'Change the name of a customer' do
     visit root_path

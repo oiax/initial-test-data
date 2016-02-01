@@ -1,5 +1,9 @@
 # CHANGELOG - initial-test-data
 
+## 0.4.0 (February 1, 2016)
+
+* Introduce utility methods `store` and `fetch`.
+
 ## 0.3.0 (January 31, 2016)
 
 * Monitor `app/models/**/*.rb`. When any modification is detected,
