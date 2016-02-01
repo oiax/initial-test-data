@@ -116,7 +116,21 @@ RSpec.configure do |config|
 end
 ```
 
-This option is passed to the `DatabaseCleaner.strategy=` method.
+#### `only`
+
+Contrary to the `except` option, when you use this,
+only the specified tables are initialized:
+
+```ruby
+RSpec.configure do |config|
+  config.before(:suite) do
+    InitialTestData.load('spec', only: %w(customers products))
+  end
+end
+```
+
+Note that the `except` and `only` options are used to construct
+the options passed to the `DatabaseCleaner.strategy=` method.
 
 #### `monitoring`
 
