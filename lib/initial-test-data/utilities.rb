@@ -2,8 +2,8 @@ require 'active_support'
 
 module InitialTestData
   module Utilities
-    def store(record, name)
-      model_name = record.class.model_name.singular
+    def store(record, name, options = {})
+      model_name = options[:as] || record.class.model_name.singular
       record_name = name.to_s
 
       RECORD_IDS[model_name] ||= HashWithIndifferentAccess.new

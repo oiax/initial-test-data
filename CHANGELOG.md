@@ -1,5 +1,9 @@
 # CHANGELOG - initial-test-data
 
+## 0.4.1 (February 2, 2016)
+
+* Add `as` option to the `store` utility method.
+
 ## 0.4.0 (February 1, 2016)
 
 * Introduce utility methods `store` and `fetch`.
