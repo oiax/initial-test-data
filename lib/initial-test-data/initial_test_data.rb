@@ -106,13 +106,5 @@ module InitialTestData
         end
       end
     end
-
-
-    def save_record_ids
-
-    end
-
-    def load_record_ids
-    end
   end
 end
