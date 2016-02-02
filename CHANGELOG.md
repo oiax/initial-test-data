@@ -1,5 +1,9 @@
 # CHANGELOG - initial-test-data
 
+## 0.4.2 (February 2, 2016)
+
+* Include `*.yml` to the target file list of md5 digest generation.
+
 ## 0.4.1 (February 2, 2016)
 
 * Add `as` option to the `store` utility method.

@@ -58,7 +58,7 @@ module InitialTestData
     def generate_md5_digest
       md5 = Digest::MD5.new
 
-      Dir[Rails.root.join(@dir, 'initial_data', '*.rb')].each do |f|
+      Dir[Rails.root.join(@dir, 'initial_data', '*.{rb,yml}')].each do |f|
         md5.update File.new(f).read
       end
 
