@@ -35,7 +35,7 @@ module InitialTestData
         digest.save
 
         File.open(record_ids_path, 'w') do |f|
-          f.write RECORD_IDS.to_yaml
+          f.write RECORD_IDS.to_hash.to_yaml
         end
       end
     end

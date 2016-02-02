@@ -1,5 +1,9 @@
 # CHANGELOG - initial-test-data
 
+## 0.4.3 (February 2, 2016)
+
+* Covert RECORD_IDS to a regular hash before save.
+
 ## 0.4.2 (February 2, 2016)
 
 * Include `*.yml` to the target file list of md5 digest generation.
