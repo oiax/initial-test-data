@@ -77,15 +77,15 @@ module InitialTestData
     end
 
     def initialize_data
-      strategy_options = @options.slice(:only, :except)
-      unless strategy_options.has_key?(:only)
-        strategy_options[:except] ||= []
-        unless strategy_options[:except].include?(DIGEST_TABLE_NAME)
-          strategy_options[:except] << DIGEST_TABLE_NAME
-        end
+      tables = non_empty_tables
+
+      if @options[:only].kind_of?(Array)
+        tables = tables & @options[:only]
+      elsif @options[:except].kind_of?(Array)
+        tables = tables - @options[:except]
       end
 
-      DatabaseCleaner.strategy = :truncation, strategy_options
+      DatabaseCleaner.strategy = :truncation, { only: tables }
       DatabaseCleaner.clean
 
       yaml_path = Rails.root.join(@dir, 'initial_data', '_index.yml')
@@ -105,6 +105,20 @@ module InitialTestData
           require f
         end
       end
+    end
+
+    def non_empty_tables
+      tables = []
+
+      conn = ActiveRecord::Base.connection
+      conn.tables.each do |table|
+        next if table.in?([ DIGEST_TABLE_NAME, 'schema_migrations' ])
+        if conn.select_one("select * from #{table}")
+          tables << table
+        end
+      end
+
+      tables
     end
   end
 end

@@ -1,5 +1,9 @@
 # CHANGELOG - initial-test-data
 
+## 0.4.4 (February 2, 2016)
+
+* Truncate only non-empty tables (optimization).
+
 ## 0.4.3 (February 2, 2016)
 
 * Covert RECORD_IDS to a regular hash before save.
