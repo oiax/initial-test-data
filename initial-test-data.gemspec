@@ -12,7 +12,8 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = ">= 2.0"
 
-  s.add_dependency "activesupport", ">= 3.0"
+  s.add_dependency "activesupport", ">= 3.0", "< 6.0"
+  s.add_dependency "activerecord", ">= 3.0", "< 6.0"
   s.add_dependency "database_cleaner", "~> 1.5"
 
   s.files = %w(CHANGELOG.md README.md MIT-LICENSE) + Dir.glob("lib/**/*")
