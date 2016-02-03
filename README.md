@@ -163,8 +163,13 @@ in order to register an ActiveRecord object by name:
 ```ruby
 include InitialTestData::Utilities
 
+# Using Active Record
 store(Customer.create(...), :john)
 store(ShopOwner.create(...), :mike)
+
+# Using Factory Girl
+store(create(:customer, ...), :john)
+store(create(:shop_owner, ...), :john)
 ```
 
 Then, you can get this record with `fetch` method in the test scripts:
