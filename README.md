@@ -8,12 +8,16 @@ The `initial-test-data` is a tool to create a text fixture for Rails application
 Overview
 --------
 
-Although the Rails itself has a standard mechanism
-([Fixtures](http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html)),
+Although the Rails itself has a standard mechanism to initialize the database
+in the _test_ environment
+([ActiveRecord::FixtureSet](http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html)),
 it is rather cumbersome to construct a real (often complicated) data structure
 from YAML files.
 
 The `initial-test-data` provides a a way to create a test fixture using Active Record, Factory Girl, etc.
+
+It also offers utility methods called `store` and `fetch`
+to register and access the initialized data.
 
 Installation
 ------------
