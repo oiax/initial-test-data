@@ -1,6 +1,8 @@
 initial-test-data
 =================
 
+[![Gem Version](https://badge.fury.io/rb/initial-test-data.svg)](https://badge.fury.io/rb/initial-test-data)
+
 The `initial-test-data` is a tool to create a text fixture for Rails applications.
 
 Overview
