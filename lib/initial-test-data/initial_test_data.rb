@@ -1,6 +1,8 @@
 require 'digest/md5'
 require 'database_cleaner'
-require 'active_support'
+require 'active_support/hash_with_indifferent_access'
+require 'active_record'
+require 'rails'
 
 module InitialTestData
   DIGEST_TABLE_NAME = '_initial_data_digest'
@@ -44,7 +46,7 @@ module InitialTestData
     def define_class
       conn = ActiveRecord::Base.connection
 
-      unless conn.table_exists?(DIGEST_TABLE_NAME)
+      unless conn.data_source_exists?(DIGEST_TABLE_NAME)
         conn.create_table(DIGEST_TABLE_NAME) do |t|
           t.string :md5_value
         end
@@ -111,7 +113,7 @@ module InitialTestData
       tables = []
 
       conn = ActiveRecord::Base.connection
-      conn.tables.each do |table|
+      conn.data_sources.each do |table|
         next if table.in?([ DIGEST_TABLE_NAME, 'schema_migrations' ])
         if conn.select_one("select * from #{table}")
           tables << table
