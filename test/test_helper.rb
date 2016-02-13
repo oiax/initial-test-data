@@ -21,26 +21,8 @@ ActiveRecord::Base.establish_connection(
   timeout: 5000
 )
 
-class CreateUsers < ActiveRecord::Migration
-  def change
-    create_table(:users) do |t|
-      t.string :name
-      t.date :birthday
-    end
-  end
-end
-
-class CreateProducts < ActiveRecord::Migration
-  def change
-    create_table(:products) do |t|
-      t.string :name
-      t.integer :price
-    end
-  end
-end
-
-CreateUsers.migrate(:up)
-CreateProducts.migrate(:up)
+require 'migrations/create_users'
+require 'migrations/create_products'
 
 require 'models/user'
 require 'models/product'
