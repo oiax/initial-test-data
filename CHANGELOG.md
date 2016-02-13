@@ -1,5 +1,10 @@
 # CHANGELOG - initial-test-data
 
+## 0.5.0 (February 14, 2016)
+
+* Change method name from `load` to `import`.
+* Add test suite.
+
 ## 0.4.4 (February 2, 2016)
 
 * Truncate only non-empty tables (optimization).

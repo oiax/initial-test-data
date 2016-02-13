@@ -9,6 +9,7 @@ $:.unshift File.dirname(__FILE__) + '/../lib'
 File.delete(File.dirname(__FILE__) + '/../tmp/test.sqlite3')
 
 app = Class.new(Rails::Application)
+app.config.active_support.test_order = :random
 app.config.eager_load = false
 app.initialize!
 

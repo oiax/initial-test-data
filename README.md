@@ -43,7 +43,7 @@ require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 require 'initial-test-data'
 
-InitialTestData.load
+InitialTestData.import
 
 class ActiveSupport::TestCase
   include InitialTestData::Utilities
@@ -52,7 +52,7 @@ class ActiveSupport::TestCase
 end
 ```
 
-Note that the default value of the first argument of `load` method is `'test'`,
+Note that the default value of the first argument of `import` method is `'test'`,
 so you can omit it when your test scripts are located in the `test` directory.
 
 ### RSpec
@@ -70,7 +70,7 @@ RSpec.configure do |config|
   config.include InitialTestData::Utilities
 
   config.before(:suite) do
-    InitialTestData.load('spec')
+    InitialTestData.import('spec')
   end
 end
 ```
@@ -105,7 +105,7 @@ which has a content like this:
 - orders
 ```
 
-### Options for the `InitialTestData.load` method
+### Options for the `InitialTestData.import` method
 
 #### `except`
 
@@ -117,7 +117,7 @@ If you want to keep some tables intact, specify the `except` option:
 ```ruby
 RSpec.configure do |config|
   config.before(:suite) do
-    InitialTestData.load('spec', except: %w(country_names))
+    InitialTestData.import('spec', except: %w(country_names))
   end
 end
 ```
@@ -130,7 +130,7 @@ only the specified tables are initialized:
 ```ruby
 RSpec.configure do |config|
   config.before(:suite) do
-    InitialTestData.load('spec', only: %w(customers products))
+    InitialTestData.import('spec', only: %w(customers products))
   end
 end
 ```
@@ -145,18 +145,23 @@ under the `test` directory (or the directory specified by the first argument)
 and the `app/models` directory.
 
 If you want to add monitoring target directories, specify `monitoring`
-option to the `InitialTestData.load` method:
+option to the `InitialTestData.import` method:
 
 ```ruby
 RSpec.configure do |config|
   config.before(:suite) do
-    InitialTestData.load('spec',
+    InitialTestData.import('spec',
       monitoring: [ 'app/services', 'lib', 'spec/factories' ]
   end
 end
 ```
 
 You should use relative paths from the `Rails.root`.
+
+#### `quite`
+
+Specify `true` to this option in order to suppress the message from the
+`initial-test-data`.
 
 ### Utility methods: `store` and `fetch`
 

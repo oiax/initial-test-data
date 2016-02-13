@@ -5,25 +5,29 @@ require 'initial-test-data'
 class InitialTestDataTest < ActiveSupport::TestCase
   include InitialTestData::Utilities
 
-  test "should load data into test database" do
-    InitialTestData.load(quiet: true)
+  def setup
+    File.delete(File.dirname(__FILE__) + '/../tmp/initial_data_record_ids.yml')
+  end
+
+  test "should import data into test database" do
+    InitialTestData.import(quiet: true)
     assert User.count, 3
 
     File.open(File.dirname(__FILE__) + '/initial_data/users2.rb', 'w') do |f|
       f.write "store User.create!(name: 'dave', birthday: '1960-04-01'), :dave"
     end
 
-    InitialTestData.load(quiet: true)
+    InitialTestData.import(quiet: true)
     assert User.count, 4
 
     File.delete(File.dirname(__FILE__) + '/initial_data/users2.rb')
 
-    InitialTestData.load(quiet: true)
+    InitialTestData.import(quiet: true)
     assert User.count, 3
   end
 
-  test "should load and fetch test records" do
-    InitialTestData.load(quiet: true)
+  test "should import and fetch test records" do
+    InitialTestData.import(quiet: true)
 
     user1 = fetch(:user, :bob)
     user2 = fetch(:user, :cate)

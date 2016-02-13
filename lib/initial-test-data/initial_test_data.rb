@@ -9,7 +9,7 @@ module InitialTestData
   RECORD_IDS = HashWithIndifferentAccess.new
 
   class << self
-    def load(*args)
+    def import(*args)
       @options = args.extract_options!
       @dir = args[0] || 'test'
 
@@ -29,6 +29,7 @@ module InitialTestData
       end
 
       if needs_reinitialization
+        RECORD_IDS.clear
         initialize_data
 
         digest = klass.first
@@ -46,7 +47,7 @@ module InitialTestData
     def define_class
       conn = ActiveRecord::Base.connection
 
-      unless conn.data_source_exists?(DIGEST_TABLE_NAME)
+      unless ditest_table_exists?
         conn.create_table(DIGEST_TABLE_NAME) do |t|
           t.string :md5_value
         end
@@ -55,6 +56,13 @@ module InitialTestData
       Class.new(ActiveRecord::Base) do
         self.table_name = DIGEST_TABLE_NAME
       end
+    end
+
+    def ditest_table_exists?
+      conn = ActiveRecord::Base.connection
+      ::Rails::VERSION::MAJOR >= 5 ?
+        conn.data_source_exists?(DIGEST_TABLE_NAME) :
+        conn.table_exists?(DIGEST_TABLE_NAME)
     end
 
     def generate_md5_digest
@@ -97,14 +105,14 @@ module InitialTestData
           path = Rails.root.join(@dir, 'initial_data', "#{table_name}.rb")
           if File.exist?(path)
             puts "Creating #{table_name}...." unless @options[:quiet]
-            require path
+            load path
           end
         end
       else
-        Dir[Rails.root.join(@dir, 'initial_data', '*.rb')].each do |f|
-          table_name = f.match(/(\w+)\.rb$/)[1]
+        Dir[Rails.root.join(@dir, 'initial_data', '*.rb')].each do |path|
+          table_name = path.match(/(\w+)\.rb$/)[1]
           puts "Creating #{table_name}...." unless @options[:quiet]
-          require f
+          load path
         end
       end
     end
@@ -113,7 +121,10 @@ module InitialTestData
       tables = []
 
       conn = ActiveRecord::Base.connection
-      conn.data_sources.each do |table|
+      data_sources = ::Rails::VERSION::MAJOR >= 5 ?
+        conn.data_sources : conn.tables
+
+      data_sources.each do |table|
         next if table.in?([ DIGEST_TABLE_NAME, 'schema_migrations' ])
         if conn.select_one("select * from #{table}")
           tables << table
