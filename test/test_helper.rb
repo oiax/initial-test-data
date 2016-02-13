@@ -29,3 +29,5 @@ class CreateUsers < ActiveRecord::Migration
 end
 
 CreateUsers.migrate(:up)
+
+require 'models/user'
