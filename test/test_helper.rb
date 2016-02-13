@@ -3,10 +3,11 @@ require 'minitest/autorun'
 require 'active_support'
 require 'active_record'
 require 'rails'
+require 'fileutils'
 
 $:.unshift File.dirname(__FILE__) + '/../lib'
 
-File.delete(File.dirname(__FILE__) + '/../tmp/test.sqlite3')
+FileUtils.rm_f(File.dirname(__FILE__) + '/../tmp/test.sqlite3')
 
 app = Class.new(Rails::Application)
 app.config.active_support.test_order = :random
@@ -29,6 +30,17 @@ class CreateUsers < ActiveRecord::Migration
   end
 end
 
+class CreateProducts < ActiveRecord::Migration
+  def change
+    create_table(:products) do |t|
+      t.string :name
+      t.integer :price
+    end
+  end
+end
+
 CreateUsers.migrate(:up)
+CreateProducts.migrate(:up)
 
 require 'models/user'
+require 'models/product'
