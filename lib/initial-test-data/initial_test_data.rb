@@ -96,14 +96,14 @@ module InitialTestData
         table_names.each do |table_name|
           path = Rails.root.join(@dir, 'initial_data', "#{table_name}.rb")
           if File.exist?(path)
-            puts "Creating #{table_name}...."
+            puts "Creating #{table_name}...." unless @options[:quiet]
             require path
           end
         end
       else
         Dir[Rails.root.join(@dir, 'initial_data', '*.rb')].each do |f|
           table_name = f.match(/(\w+)\.rb$/)[1]
-          puts "Creating #{table_name}...."
+          puts "Creating #{table_name}...." unless @options[:quiet]
           require f
         end
       end
