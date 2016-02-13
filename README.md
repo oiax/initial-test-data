@@ -187,7 +187,7 @@ Then, you can get this record with `fetch` method in the test scripts:
 
 ```ruby
 customer = fetch(:customer, :john)
-show_owner = fetch(:shop_owner, :mike)
+shop_owner = fetch(:shop_owner, :mike)
 ```
 
 The fetch method treats `:john` and `"john"` as the same key.
