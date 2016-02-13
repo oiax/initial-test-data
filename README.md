@@ -158,9 +158,9 @@ end
 
 You should use relative paths from the `Rails.root`.
 
-#### `quite`
+#### `quiet`
 
-Specify `true` to this option in order to suppress the message from the
+Specify `true` to this option in order to suppress the info messages from the
 `initial-test-data`.
 
 ### Utility methods: `store` and `fetch`
