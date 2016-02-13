@@ -3,6 +3,8 @@ require 'test_helper'
 require 'initial-test-data'
 
 class InitialTestDataTest < ActiveSupport::TestCase
+  include InitialTestData::Utilities
+
   test "should load data into test database" do
     InitialTestData.load
     assert User.count, 3
@@ -18,5 +20,14 @@ class InitialTestDataTest < ActiveSupport::TestCase
 
     InitialTestData.load
     assert User.count, 3
+  end
+
+  test "should load and fetch test records" do
+    InitialTestData.load
+
+    user1 = fetch(:user, :bob)
+    user2 = fetch(:user, :cate)
+    assert user1.name, 'bob'
+    assert user2.name, 'cate'
   end
 end
