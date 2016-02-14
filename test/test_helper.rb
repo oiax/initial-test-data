@@ -23,6 +23,8 @@ ActiveRecord::Base.establish_connection(
 
 require 'migrations/create_users'
 require 'migrations/create_products'
+require 'migrations/create_orders'
 
 require 'models/user'
 require 'models/product'
+require 'models/order'

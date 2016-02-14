@@ -27,15 +27,12 @@ class InitialTestDataTest < ActiveSupport::TestCase
     assert_equal 3, User.count
   end
 
-  test "should import data from tmp directory" do
-    FileUtils.mkdir_p(File.dirname(__FILE__) + '/../tmp/initial_data')
-    File.open(File.dirname(__FILE__) + '/../tmp/initial_data/users2.rb', 'w') do |f|
-      f.puts "include InitialTestData::Utilities"
-      f.puts "store User.create!(name: 'dave', birthday: '1960-04-01'), :dave"
-    end
+  test "should import data from test/extra directory using _index.yml" do
+    InitialTestData.import('test/extra', quiet: true)
 
-    InitialTestData.import('tmp', quiet: true)
     assert_equal 1, User.count
+    assert_equal 1, Product.count
+    assert_equal 2, Order.count
   end
 
   test "should truncate only users table" do
