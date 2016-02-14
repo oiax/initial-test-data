@@ -21,6 +21,8 @@ ActiveRecord::Base.establish_connection(
   timeout: 5000
 )
 
+ActiveRecord::Migration.verbose = false
+
 require 'migrations/create_users'
 require 'migrations/create_products'
 require 'migrations/create_orders'
