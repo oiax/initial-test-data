@@ -14,7 +14,7 @@ in the _test_ environment
 it is rather cumbersome to construct a real (often complicated) data structure
 from YAML files.
 
-The `initial-test-data` provides a a way to create a test fixture using Active Record, Factory Girl, etc.
+The `initial-test-data` provides a way to create a test fixture using Active Record, Factory Girl, etc.
 
 It also offers utility methods called `store` and `fetch`
 to register and access the initialized data.
