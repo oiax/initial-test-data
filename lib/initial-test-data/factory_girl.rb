@@ -1,4 +1,8 @@
 require 'active_support'
+begin LoadError
+  require 'factory_girl'
+rescue
+end
 
 module FactoryGirl
   module SequenceWithCachedEnumerator
@@ -9,5 +13,7 @@ module FactoryGirl
     end
   end
 
-  Sequence.send(:prepend, SequenceWithCachedEnumerator)
+  if FactoryGirl.const_defined?(:Sequence)
+    Sequence.send(:prepend, SequenceWithCachedEnumerator)
+  end
 end

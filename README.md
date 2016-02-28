@@ -25,7 +25,7 @@ Installation
 Add the following line to `Gemfile`:
 
 ```ruby
-gem 'initial-test-data', require: false, group: :test
+gem 'initial-test-data', group: :test
 ```
 
 Run `bin/bundle install` on the terminal.
@@ -41,7 +41,7 @@ Edit `test/test_helper.rb` like this:
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
-require 'initial-test-data'
+require 'initial-test-data/factory_girl' # If you use the Factory Girl
 
 InitialTestData.import
 
@@ -64,7 +64,7 @@ ENV["RAILS_ENV"] ||= 'test'
 require 'spec_helper'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
-require 'initial-test-data'
+require 'initial-test-data/factory_girl' # If you use the Factory Girl
 
 RSpec.configure do |config|
   config.include InitialTestData::Utilities
@@ -250,8 +250,8 @@ end
 ...
 group :test do
   gem 'rspec-rails'
-  gem 'factory_girl_rails', require: false
-  gem 'initial-test-data', require: false
+  gem 'factory_girl_rails'
+  gem 'initial-test-data'
 end
 ...
 
@@ -261,8 +261,7 @@ ENV["RAILS_ENV"] ||= 'test'
 require 'spec_helper'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
-require 'factory_girl'
-require 'initial-test-data'
+require 'initial-test-data/factory_girl'
 
 FactoryGirl.reload
 ...
@@ -310,8 +309,6 @@ feature 'Manage customers' do
   end
 end
 ```
-
-Note that you should require `initial-test-data` *after* `factory_girl`.
 
 License
 -------

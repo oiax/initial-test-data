@@ -1,6 +1,7 @@
 $:.unshift File.dirname(__FILE__)
 require 'test_helper'
 require 'initial-test-data'
+require 'initial-test-data/factory_girl'
 require 'fileutils'
 
 class InitialTestDataTest < ActiveSupport::TestCase
