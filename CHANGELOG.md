@@ -1,5 +1,9 @@
 # CHANGELOG - initial-test-data
 
+## 0.6.1 (February 28, 2016)
+
+* Users should require factory_girl patch explicitly.
+
 ## 0.6.0 (February 28, 2016)
 
 * Allow the Factory Girl to generate sequences correctly.
