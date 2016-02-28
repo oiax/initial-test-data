@@ -4,6 +4,7 @@ require 'active_support'
 require 'active_record'
 require 'rails'
 require 'fileutils'
+require 'factory_girl'
 
 $:.unshift File.dirname(__FILE__) + '/../lib'
 
