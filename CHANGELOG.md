@@ -1,5 +1,9 @@
 # CHANGELOG - initial-test-data
 
+## 0.6.2 (February 28, 2016)
+
+* Determine by `REINIT` environment variable if reinitialization is required.
+
 ## 0.6.1 (February 28, 2016)
 
 * Users should require factory_girl patch explicitly.
