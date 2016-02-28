@@ -14,6 +14,13 @@ class InitialTestDataTest < ActiveSupport::TestCase
     ENV.delete('REINIT')
   end
 
+  def teardown
+    FileUtils.rm_f(File.dirname(__FILE__) + '/../tmp/initial_data_record_ids.yml')
+    FileUtils.rm_f(File.dirname(__FILE__) + '/../tmp/initial_data_enumerators.yml')
+    FileUtils.rm_f(File.dirname(__FILE__) + '/initial_data/users2.rb')
+    ENV.delete('REINIT')
+  end
+
   test "should import data into test database" do
     InitialTestData.import(quiet: true)
     assert_equal 3, User.count
@@ -35,19 +42,21 @@ class InitialTestDataTest < ActiveSupport::TestCase
     InitialTestData.import(quiet: true)
     assert_equal 3, User.count
 
-    User.delete_all
-
     File.open(File.dirname(__FILE__) + '/initial_data/users2.rb', 'w') do |f|
       f.puts "store User.create!(name: 'dave', birthday: '1960-04-01'), :dave"
     end
 
+    InitialTestData::RECORD_IDS.clear
     ENV['REINIT'] = '0'
     InitialTestData.import(quiet: true)
-    assert_equal 0, User.count
+    assert_equal 3, User.count
+    assert_equal 'cate', fetch(:user, :cate).name
 
+    InitialTestData::RECORD_IDS.clear
     ENV['REINIT'] = '1'
     InitialTestData.import(quiet: true)
     assert_equal 4, User.count
+    assert_equal 'cate', fetch(:user, :cate).name
   end
 
   test "should import data from test/extra directory using _index.yml" do

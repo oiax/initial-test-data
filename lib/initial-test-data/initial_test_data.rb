@@ -20,7 +20,8 @@ module InitialTestData
 
       needs_reinitialization = true
       record_ids_path = Rails.root.join('tmp', 'initial_data_record_ids.yml')
-      if File.exists?(record_ids_path) && md5_digest == md5_digest_cache
+      if File.exists?(record_ids_path) &&
+        (ENV['REINIT'] == '0' || md5_digest == md5_digest_cache)
         begin
           RECORD_IDS.merge! YAML.load_file(record_ids_path)
           needs_reinitialization = false
