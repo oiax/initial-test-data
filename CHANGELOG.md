@@ -1,6 +1,10 @@
 # CHANGELOG - initial-test-data
 
-## 0.6.2 (February 28, 2016)
+## 0.6.3 (February 28, 2016)
+
+* Bug fix: Load record ids when `REINIT` is set 0.
+
+## 0.6.2 (February 28, 2016) yanked
 
 * Determine by `REINIT` environment variable if reinitialization is required.
 
