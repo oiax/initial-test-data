@@ -2,9 +2,8 @@ module InitialTestData
   class SequenceEnumerator
     def initialize(name)
       @name = name
-      @value = self.class.initial_value_for(name)
-
-      self.class.register(name, self)
+      @index = self.class.register(name, self)
+      @value = self.class.initial_value_for(name, @index)
     end
 
     def peek
@@ -26,28 +25,38 @@ module InitialTestData
       end
 
       def register(name, enumerator)
-        enumerators[name.to_s] = enumerator
+        enumerators[name.to_s] ||= []
+        enumerators[name.to_s] << enumerator
+        enumerators[name.to_s].size - 1
       end
 
-      def initial_value_for(name)
-        cached_values[name.to_s] || 1
+      def initial_value_for(name, index)
+        cached_values_for(name)[index] || 1
       end
 
       def reset
-        enumerators.each_value do |enum|
-          enum.reset
+        enumerators.each_value do |enums|
+          enums.each do |enum|
+            enum.reset
+          end
         end
       end
 
       def save
+        hash = {}
+        enumerators.each do |name, enums|
+          hash[name] = enums.map(&:peek)
+        end
         File.open(data_path, 'w') do |f|
-          f.write enumerators.map { |k, v| [ k, v.peek ] }.to_h.to_yaml
+          f.write hash.to_yaml
         end
       end
 
       private
-      def cached_values
-        return @cached_values if @cached_values
+      def cached_values_for(name)
+        if @cached_values
+          return @cached_values[name.to_s] || []
+        end
         @cached_values = {}
         if File.exists?(data_path)
           begin
@@ -55,7 +64,7 @@ module InitialTestData
           rescue SyntaxError
           end
         end
-        @cached_values
+        @cached_values[name.to_s] || []
       end
 
       def data_path
