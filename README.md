@@ -25,7 +25,7 @@ Installation
 Add the following line to `Gemfile`:
 
 ```ruby
-gem 'initial-test-data', group: :test
+gem 'initial-test-data', require: false, group: :test
 ```
 
 Run `bin/bundle install` on the terminal.
@@ -245,6 +245,38 @@ end
 ### RSpec, Capybara and Factory Girl
 
 ```ruby
+# Gemfile
+
+...
+group :test do
+  gem 'rspec-rails'
+  gem 'factory_girl_rails', require: false
+  gem 'initial-test-data', require: false
+end
+...
+
+# spec/rails_helper.rb
+
+ENV["RAILS_ENV"] ||= 'test'
+require 'spec_helper'
+require File.expand_path("../../config/environment", __FILE__)
+require 'rspec/rails'
+require 'factory_girl'
+require 'initial-test-data'
+
+FactoryGirl.reload
+...
+
+# spec/factories/customers.rb
+
+FactoryGirl.define do
+  factory(:customer) do
+    sequence(:email) { |n| "test#{n}@example.com" }
+    given_name 'John',
+    family_name 'Doe'
+  end
+end
+
 # spec/initial_data/customers.rb
 
 include FactoryGirl::Syntax::Methods
@@ -278,6 +310,8 @@ feature 'Manage customers' do
   end
 end
 ```
+
+Note that you should require `initial-test-data` *after* `factory_girl`.
 
 License
 -------

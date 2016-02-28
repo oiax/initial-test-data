@@ -1,5 +1,9 @@
 # CHANGELOG - initial-test-data
 
+## 0.6.0 (February 28, 2016)
+
+* Allow the Factory Girl to generate sequences correctly.
+
 ## 0.5.0 (February 14, 2016)
 
 * Change method name from `load` to `import`.
