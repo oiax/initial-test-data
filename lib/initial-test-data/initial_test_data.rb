@@ -29,6 +29,7 @@ module InitialTestData
       end
 
       if needs_reinitialization
+        SequenceEnumerator.reset
         RECORD_IDS.clear
         initialize_data
 
@@ -40,6 +41,7 @@ module InitialTestData
         File.open(record_ids_path, 'w') do |f|
           f.write RECORD_IDS.to_hash.to_yaml
         end
+        SequenceEnumerator.save
       end
     end
 
