@@ -42,6 +42,11 @@ module InitialTestData
         end
       end
 
+      def clear
+        @enumerators.clear
+        @cached_values = nil
+      end
+
       def save
         hash = {}
         enumerators.each do |name, enums|

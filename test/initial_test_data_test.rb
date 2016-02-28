@@ -8,6 +8,7 @@ class InitialTestDataTest < ActiveSupport::TestCase
 
   def setup
     FileUtils.rm_f(File.dirname(__FILE__) + '/../tmp/initial_data_record_ids.yml')
+    FileUtils.rm_f(File.dirname(__FILE__) + '/../tmp/initial_data_enumerators.yml')
   end
 
   test "should import data into test database" do
@@ -33,6 +34,24 @@ class InitialTestDataTest < ActiveSupport::TestCase
     assert_equal 1, User.count
     assert_equal 1, Product.count
     assert_equal 2, Order.count
+  end
+
+  test "should import data from test/factory_girl directory using factory_girl" do
+    FactoryGirl.reload
+    InitialTestData.import('test/factory_girl', quiet: true)
+
+    user = FactoryGirl.create(:user)
+
+    assert_equal 4, User.count
+    assert_equal 'test1', User.first.name
+    assert_equal 'test4', user.name
+
+    InitialTestData::SequenceEnumerator.clear
+    FactoryGirl.reload
+
+    InitialTestData.import('test/factory_girl', quiet: true)
+    user = FactoryGirl.build(:user)
+    assert_equal 'test4', user.name
   end
 
   test "should truncate only users table" do

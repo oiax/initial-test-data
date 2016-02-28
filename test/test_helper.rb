@@ -6,6 +6,9 @@ require 'rails'
 require 'fileutils'
 require 'factory_girl'
 
+FactoryGirl.definition_file_paths = [ File.dirname(__FILE__) + '/factories' ]
+FactoryGirl.reload
+
 $:.unshift File.dirname(__FILE__) + '/../lib'
 
 FileUtils.rm_f(File.dirname(__FILE__) + '/../tmp/test.sqlite3')
