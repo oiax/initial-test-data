@@ -28,7 +28,7 @@ module InitialTestData
         end
       end
 
-      if needs_reinitialization
+      if ENV['REINIT'] == '1' || (needs_reinitialization && ENV['REINIT'] != '0')
         SequenceEnumerator.reset
         RECORD_IDS.clear
         initialize_data

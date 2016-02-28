@@ -197,6 +197,20 @@ named `initial_data_record_ids.yml` in the `tmp` directory
 to track the primary key values of registered records.
 Please do not remove or tamper it.
 
+### Environment variable `REINIT`
+
+If you want to enforce the initialization process, add `REINIT=1` before the command:
+
+```text
+REINIT=1 bin/rake test
+```
+
+When you want to skip it, place `REINIT=0` before the command:
+
+```text
+REINIT=0 bin/rake test
+```
+
 Example
 -------
 
